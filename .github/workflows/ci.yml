@@ -1,0 +1,47 @@
+name: Continuous Integration
+on:
+  push:
+  workflow_dispatch:
+env:
+  PRODUCT: 'WebGoat App'
+  ENGAGEMENT: 'Test CI'
+  TARGET: http://172.17.0.1:8081/WebGoat/
+
+jobs:
+  WAST:
+    name: Web Application Security Testing
+    runs-on: self-hosted
+    permissions: read-all
+    steps:
+      - name: run pentest
+        uses: hoainamnv34/pentest@main
+        with:
+          target: '${{env.TARGET}}'  
+          zap_http: ${{vars.ZAP_HTTP}}
+          zap_https: ${{vars.ZAP_HTTPS}}
+      - name: ls
+        run: ls
+          
+  # import-secret-Scanning:
+  #   needs: WAST
+  #   name: Import Secret Scanning
+  #   runs-on: self-hosted
+  #   permissions: read-all
+  #   steps:
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: gitleak-report
+  #         path: .
+  #     - name: import to DefectDojo
+  #       uses: hoainamnv34/import-to-DefectDojo@main
+  #       with:
+  #         host: '${{vars.DEFECTDOJO_URL}}'
+  #         product: ${{env.PRODUCT}}
+  #         engagement: ${{env.ENGAGEMENT}}
+  #         scan: 'Gitleaks Scan'
+  #         is_new_import: 'True'
+  #         report: 'report.json'
+  #         token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
+          
+  
