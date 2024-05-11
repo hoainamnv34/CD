@@ -18,7 +18,7 @@ jobs:
         with:
           target: '${{env.TARGET}}'  
           zap_http: ${{vars.ZAP_HTTP}}
-          zap_https: ${{vars.ZAP_HTTPS}}
+          zap_https: ${{vars.ZAP_HTTP}}
       - name: ls
         run: ls
           
