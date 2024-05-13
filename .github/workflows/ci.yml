@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 env:
   PRODUCT: 'WebGoat App'
-  ENGAGEMENT: 'Test CI'
+  ENGAGEMENT: 'Test CD'
   TARGET: http://172.17.0.1:8081/WebGoat/
 
 jobs:
@@ -26,29 +26,38 @@ jobs:
       - name: Upload Test results
         uses: actions/upload-artifact@v4
         with:
-          name: SCA-report
+          name: WAST-report
           path: ./report.xml
           
-  # import-secret-Scanning:
-  #   needs: WAST
-  #   name: Import Secret Scanning
-  #   runs-on: self-hosted
-  #   permissions: read-all
-  #   steps:
-  #     - name: Download artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: gitleak-report
-  #         path: .
-  #     - name: import to DefectDojo
-  #       uses: hoainamnv34/import-to-DefectDojo@main
-  #       with:
-  #         host: '${{vars.DEFECTDOJO_URL}}'
-  #         product: ${{env.PRODUCT}}
-  #         engagement: ${{env.ENGAGEMENT}}
-  #         scan: 'Gitleaks Scan'
-  #         is_new_import: 'True'
-  #         report: 'report.json'
-  #         token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
+  import-WAST:
+    needs: WAST
+    name: Import WAST
+    runs-on: self-hosted
+    permissions: read-all
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: WAST-report
+          path: .
+      - name: ls
+        run: ls
+      - name: import to DefectDojo
+        uses: hoainamnv34/import-to-DefectDojo@main
+        with:
+          host: '${{vars.DEFECTDOJO_URL}}'
+          product: ${{env.PRODUCT}}
+          engagement: ${{env.ENGAGEMENT}}
+          scan: 'ZAP Scan'
+          is_new_import: 'True'
+          report: 'report.xml'
+          token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
+          active: "True"
+          verified: "True"
+          test_title: "Web Application Security Testing"
+          close_old_findings: "True"
+          close_old_findings_product_scope: "True"
+          branch_tag: "${{ github.event.base_ref }}"
+          commit_hash: "${{ github.sha }}"
           
   
