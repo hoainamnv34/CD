@@ -1,6 +1,6 @@
 name: Continuous Integration
 on:
-  # push:
+  push:
   workflow_dispatch:
 env:
   PRODUCT: 'WebGoat App'
@@ -32,6 +32,8 @@ jobs:
   #       with:
   #         name: wast-report
   #         path: ./report.xml
+  #     - name: test
+  #       run: rm ./report.xml
           
   # import-WAST:
   #   needs: WAST
@@ -86,6 +88,8 @@ jobs:
         with:
           name: sas-report
           path: report.xml
+      - name: test
+        run: rm ./report.xml
           
   import-SAS:
     needs: SAS
@@ -96,7 +100,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          # name: sas-report
+          name: sas-report
           path: .
       - name: ls
         run: ls
