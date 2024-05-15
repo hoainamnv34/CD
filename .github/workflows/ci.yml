@@ -59,5 +59,55 @@ jobs:
           close_old_findings_product_scope: "True"
           branch_tag: "${{ github.event.base_ref }}"
           commit_hash: "${{ github.sha }}"
+  SAS:
+    name: Security API Scanning
+    runs-on: self-hosted
+    permissions: read-all
+    steps:
+      - name: ls
+        run: ls
+      - name: run jmeter
+        uses: hoainamnv34/jmeter@main
+        with:
+          target: '${{env.TARGET}}'  
+          zap-host: ${{vars.ZAP_HTTP}}
+      - name: ls
+        run: ls
+      - name: Upload Test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: wast-report
+          path: ./report.xml
+          
+  import-SAS:
+    needs: SAS
+    name: Import SAS
+    runs-on: self-hosted
+    permissions: read-all
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          # name: wast-report
+          path: .
+      - name: ls
+        run: ls
+      - name: import to DefectDojo
+        uses: hoainamnv34/import-to-DefectDojo@main
+        with:
+          host: '${{vars.DEFECTDOJO_URL}}'
+          product: ${{env.PRODUCT}}
+          engagement: ${{env.ENGAGEMENT}}
+          scan: 'ZAP Scan'
+          is_new_import: 'True'
+          report: 'report.xml'
+          token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
+          active: "True"
+          verified: "True"
+          test_title: "Security API Scanning"
+          close_old_findings: "True"
+          close_old_findings_product_scope: "True"
+          branch_tag: "${{ github.event.base_ref }}"
+          commit_hash: "${{ github.sha }}"
           
   
