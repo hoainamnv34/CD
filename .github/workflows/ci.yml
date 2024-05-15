@@ -82,7 +82,7 @@ jobs:
       - name: pwd
         run: pwd
       - name: Upload Test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: sas-report
           path: report.xml
@@ -94,7 +94,7 @@ jobs:
     permissions: read-all
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: sas-report
           path: .
