@@ -5,7 +5,7 @@ on:
 env:
   PRODUCT: 'WebGoat App'
   ENGAGEMENT: 'Test CD'
-  TARGET: http://172.17.0.1:8081/WebGoat/
+  TARGET: http://172.17.0.1:8081/
 
 jobs:
   WAST:
