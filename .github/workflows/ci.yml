@@ -69,7 +69,7 @@ jobs:
     permissions: read-all
     steps:
       - name: ls
-        run: ll -ah
+        run: ls -l
       - name: pwd
         run: pwd
       - name: run jmeter
@@ -78,7 +78,7 @@ jobs:
           target: '${{env.TARGET}}'  
           zap-host: ${{vars.ZAP_HTTP}}
       - name: ls
-        run: ls -ah
+        run: ls -l
       - name: pwd
         run: pwd
       - name: Upload Test results
