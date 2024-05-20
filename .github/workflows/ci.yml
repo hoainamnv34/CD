@@ -45,7 +45,7 @@ jobs:
           product: ${{env.PRODUCT}}
           engagement: ${{env.ENGAGEMENT}}
           scan: 'ZAP Scan'
-          is_new_import: 'True'
+          is_new_import: 'False'
           report: 'report.xml'
           token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
           active: "True"
@@ -91,7 +91,7 @@ jobs:
           product: ${{env.PRODUCT}}
           engagement: ${{env.ENGAGEMENT}}
           scan: 'ZAP Scan'
-          is_new_import: 'True'
+          is_new_import: 'False'
           report: 'report.xml'
           token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
           active: "True"
