@@ -6,6 +6,7 @@ env:
   PRODUCT: 'WebGoat App'
   ENGAGEMENT: 'Test CD'
   TARGET: http://172.17.0.1:8081
+  ENDPOINT: "/WebGoat"
 
 jobs:
   WAST:
@@ -16,7 +17,8 @@ jobs:
       - name: run pentest
         uses: hoainamnv34/pentest@main
         with:
-          target: '${{env.TARGET}}'  
+          target: '${{env.TARGET}}' 
+          endpoint: '${{env.ENDPOINT}}' 
           zap_http: ${{vars.ZAP_HTTP}}
           zap_https: ${{vars.ZAP_HTTP}}
       - name: Upload Test results
