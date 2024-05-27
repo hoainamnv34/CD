@@ -22,7 +22,7 @@ jobs:
           zap_http: ${{vars.ZAP_HTTP}}
           zap_https: ${{vars.ZAP_HTTP}}
       - name: Upload Test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: wast-report
           path: ./report.xml
@@ -36,7 +36,7 @@ jobs:
     permissions: read-all
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: wast-report
           path: .
@@ -68,7 +68,7 @@ jobs:
           target: '${{env.TARGET}}'  
           zap-host: ${{vars.ZAP_HTTP}}
       - name: Upload Test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: sas-report
           path: report.xml
@@ -82,7 +82,7 @@ jobs:
     permissions: read-all
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: sas-report
           path: .
