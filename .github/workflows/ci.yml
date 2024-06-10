@@ -22,53 +22,54 @@ jobs:
       - name: wait
         run: echo "waitting ${{env.TARGET}}"
 
-  WAST:
-    name: Web Application Security Testing
-    runs-on: self-hosted
-    needs: wait-for-it
-    steps:
-      - name: run pentest
-        uses: hoainamnv34/pentest@main
-        with:
-          target: '${{env.TARGET}}' 
-          endpoint: '${{env.ENDPOINT}}' 
-          zap_http: ${{vars.ZAP_HTTP}}
-          zap_https: ${{vars.ZAP_HTTP}}
-      - name: Upload Test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: wast-report
-          path: ./report.xml
-      - name: remove report
-        run: rm ./report.xml
+  # WAST:
+  #   name: Web Application Security Testing
+  #   runs-on: self-hosted
+  #   needs: wait-for-it
+  #   steps:
+  #     - name: run pentest
+  #       uses: hoainamnv34/pentest@main
+  #       with:
+  #         target: '${{env.TARGET}}' 
+  #         endpoint: '${{env.ENDPOINT}}' 
+  #         zap_http: ${{vars.ZAP_HTTP}}
+  #         zap_https: ${{vars.ZAP_HTTP}}
+  #     - name: Upload Test results
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: wast-report
+  #         path: ./report.xml
+  #     - name: remove report
+  #       run: rm ./report.xml
           
-  import-WAST:
-    needs: WAST
-    name: Import WAST
-    runs-on: ubuntu-latest
-    permissions: read-all
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: wast-report
-          path: .
-      - name: import to DefectDojo
-        uses: hoainamnv34/import-to-DefectDojo@main
-        with:
-          host: '${{vars.DEFECTDOJO_URL}}'
-          product: ${{env.DOJO_PRODUCT}}
-          engagement: ${{env.DOJO_ENGAGEMENT}}
-          scan: 'ZAP Scan'
-          report: 'report.xml'
-          token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
-          active: "True"
-          verified: "True"
-          test_title: "Web Application Security Testing"
-          close_old_findings: "True"
-          close_old_findings_product_scope: "True"
-          branch_tag: "${{ github.event.base_ref }}"
-          commit_hash: "${{ github.sha }}"
+  # import-WAST:
+  #   needs: WAST
+  #   name: Import WAST
+  #   runs-on: ubuntu-latest
+  #   permissions: read-all
+  #   steps:
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: wast-report
+  #         path: .
+  #     - name: import to DefectDojo
+  #       uses: hoainamnv34/import-to-DefectDojo@main
+  #       with:
+  #         host: '${{vars.DEFECTDOJO_URL}}'
+  #         product: ${{env.DOJO_PRODUCT}}
+  #         engagement: ${{env.DOJO_ENGAGEMENT}}
+  #         scan: 'ZAP Scan'
+  #         report: 'report.xml'
+  #         token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
+  #         active: "True"
+  #         verified: "True"
+  #         test_title: "Web Application Security Testing"
+  #         close_old_findings: "True"
+  #         close_old_findings_product_scope: "True"
+  #         branch_tag: "${{ github.event.base_ref }}"
+  #         commit_hash: "${{ github.sha }}"
+  
   SAS:
     name: Security API Scanning
     runs-on: self-hosted
@@ -79,6 +80,7 @@ jobs:
         with:
           target: '${{env.TARGET}}'  
           zap-host: ${{vars.ZAP_HTTP}}
+          test-file: ./HTTP_Request.jmx
       - name: Upload Test results
         uses: actions/upload-artifact@v4
         with:
