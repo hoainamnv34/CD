@@ -2,17 +2,30 @@ name: CD
 on:
   push:
   workflow_dispatch:
+
+
+# Các biến môi trường:
+#   DOJO_PRODUCT: ứng với tên Product trong DefectDojo
+#   DOJO_ENGAGEMENT: ứng với tên Engagement trong Product
+#   SONAR_PROJECT: projectKey của project trong SonarQube
 env:
-  PRODUCT: 'WebGoat App'
-  ENGAGEMENT: 'Test CD'
+  DOJO_PRODUCT: 'WebGoat' 
+  DOJO_ENGAGEMENT: 'Beta CD'
   TARGET: http://172.17.0.1:8081
   ENDPOINT: "/WebGoat"
 
 jobs:
+
+  wait-for-it:
+    runs-on: ubuntu-latest
+    steps:
+      - name: wait
+        run: echo "waitting ${{env.TARGET}}"
+
   WAST:
     name: Web Application Security Testing
     runs-on: self-hosted
-    permissions: read-all
+    needs: wait-for-it
     steps:
       - name: run pentest
         uses: hoainamnv34/pentest@main
@@ -47,7 +60,6 @@ jobs:
           product: ${{env.PRODUCT}}
           engagement: ${{env.ENGAGEMENT}}
           scan: 'ZAP Scan'
-          # is_new_import: 'False'
           report: 'report.xml'
           token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
           active: "True"
@@ -60,7 +72,7 @@ jobs:
   SAS:
     name: Security API Scanning
     runs-on: self-hosted
-    permissions: read-all
+    needs: wait-for-it
     steps:
       - name: run jmeter
         uses: hoainamnv34/jmeter@main
@@ -93,7 +105,6 @@ jobs:
           product: ${{env.PRODUCT}}
           engagement: ${{env.ENGAGEMENT}}
           scan: 'ZAP Scan'
-          # is_new_import: 'False'
           report: 'report.xml'
           token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }}
           active: "True"
