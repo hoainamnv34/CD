@@ -45,7 +45,7 @@ jobs:
   import-WAST:
     needs: WAST
     name: Import WAST
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions: read-all
     steps:
       - name: Download artifact
@@ -90,7 +90,7 @@ jobs:
   import-SAS:
     needs: SAS
     name: Import SAS
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions: read-all
     steps:
       - name: Download artifact
