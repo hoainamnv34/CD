@@ -22,13 +22,11 @@ jobs:
     name: Wait for a service to be ready
     runs-on: self-hosted
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: run Wait-for-It
-        uses: hoainamnv34/Wait-for-It@main
+        uses: MaximeGoyette/wait-for-it-action@master
         with:
-          host: '${{env.HEALTH_CHECK}}' 
-          timeout: '${{env.TIMEOUT}}' 
+          host: 172.17.0.1
+          port: 8081
 
   WAST:
     name: Web Application Security Testing
