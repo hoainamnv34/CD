@@ -32,8 +32,8 @@ jobs:
     runs-on: self-hosted
     needs: wait-for-it
     steps:
-      - name: run pentest
-        uses: hoainamnv34/pentest@main
+      - name: run Wait-for-It
+        uses: hoainamnv34/Wait-for-It@main
         with:
           target: '${{env.TARGET}}' 
           endpoint: '${{env.ENDPOINT}}' 
