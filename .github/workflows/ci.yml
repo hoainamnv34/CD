@@ -21,8 +21,8 @@ jobs:
     name: Wait for a service to be ready
     runs-on: self-hosted
     steps:
-      - name: run pentest
-        uses: hoainamnv34/pentest@main
+      - name: run Wait-for-It
+        uses: hoainamnv34/Wait-for-It@main
         with:
           host: '${{env.TARGET}}' 
           timeout: '${{env.TIMEOUT}}' 
@@ -32,8 +32,8 @@ jobs:
     runs-on: self-hosted
     needs: wait-for-it
     steps:
-      - name: run Wait-for-It
-        uses: hoainamnv34/Wait-for-It@main
+      - name: run pentest
+        uses: hoainamnv34/pentest@main
         with:
           target: '${{env.TARGET}}' 
           endpoint: '${{env.ENDPOINT}}' 
