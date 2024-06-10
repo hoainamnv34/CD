@@ -12,6 +12,7 @@ env:
   DOJO_PRODUCT: 'WebGoat' 
   DOJO_ENGAGEMENT: 'Beta CD'
   TARGET: http://172.17.0.1:8081
+  HEALTH_CHECK: 172.17.0.1:8081
   ENDPOINT: "/WebGoat"
   TIMEOUT: 60 
 
@@ -24,7 +25,7 @@ jobs:
       - name: run Wait-for-It
         uses: hoainamnv34/Wait-for-It@main
         with:
-          host: '${{env.TARGET}}' 
+          host: '${{env.HEALTH_CHECK}}' 
           timeout: '${{env.TIMEOUT}}' 
 
   WAST:
