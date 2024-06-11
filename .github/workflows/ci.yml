@@ -123,4 +123,15 @@ jobs:
           branch_tag: "${{ github.event.base_ref }}"
           commit_hash: "${{ github.sha }}"
           
-  
+  evaluate:
+    needs: [import-SAS, import-WAST] # Job này phụ thuộc vào các job khác gồm "import-secret-Scanning", "import-SCA", "import-SAST" và "import-dockerfile-scanning". Job này chỉ chạy sau khi các job kia hoàn thành.
+    name: Evaluate Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: import to DefectDojo
+        uses: hoainamnv34/evaluate-pipeline@main
+        with:
+          host: '${{vars.DEFECTDOJO_URL}}' # URL của DefectDojo Server, được lấy từ biến `DEFECTDOJO_URL`
+          product: ${{env.DOJO_PRODUCT}}  # Tên Product trong DefectDojo, được lấy từ biến môi trường `DOJO_PRODUCT`
+          engagement: ${{env.DOJO_ENGAGEMENT}} # Tên engagement trong DefectDojo, được lấy từ biến môi trường `DOJO_ENGAGEMENT`
+          token:  ${{ secrets.DEFECT_DOJO_API_TOKEN }} # Token API của DefectDojo, được lấy từ secrets `DEFECT_DOJO_API_TOKEN`
