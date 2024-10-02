@@ -116,3 +116,45 @@ with open(input_file, 'r') as infile:
         # Print or execute the wget command
         print(command)
         os.system(command)  # Uncomment this line to actually run the wget command
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+input_file = "input.txt"  # Path to the input file
+output_file = "output.txt"  # Path to the output file
+
+with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+    for line in infile:
+        # Strip leading and trailing whitespace from the line
+        line = line.strip()
+
+        # Skip lines starting with '#'
+        if line.startswith("#"):
+            continue
+        
+        # Identify lines containing the word "version"
+        if "version" in line:
+            # Split the line based on the '=' character
+            key, value = line.split("=")
+            
+            # Remove "_version" from the key and replace "_" with "-"
+            key = key.replace("_version", "").replace("_", "-")
+            
+            # Write the line in the format "key: value"
+            outfile.write(f"{key.strip()}: {value.strip()}\n")
+
+print("Conversion successful!")
+
