@@ -158,3 +158,43 @@ with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
 
 print("Conversion successful!")
 
+
+
+
+
+
+import argparse
+
+def convert(input_file, output_file):
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        for line in infile:
+            line = line.strip()
+            # Skip lines that start with a #
+            if line.startswith('#') or not line:
+                continue
+            
+            # Replace underscores with hyphens
+            line = line.replace('_', '-')
+
+            # Remove the "_version" suffix from the key part (before the colon)
+            if '-version:' in line:
+                line = line.replace('-version:', ':')
+            
+            # Write the modified line to the output file
+            outfile.write(line + '\n')
+
+if __name__ == '__main__':
+    # Initialize the argument parser
+    parser = argparse.ArgumentParser(description="Convert input file by modifying package names and versions.")
+    
+    # Add arguments for input and output files
+    parser.add_argument('input_file', type=str, help='Path to the input file')
+    parser.add_argument('output_file', type=str, help='Path to the output file')
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Call the convert function with the input and output file arguments
+    convert(args.input_file, args.output_file)
+
+
