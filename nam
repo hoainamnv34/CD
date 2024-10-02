@@ -1,0 +1,118 @@
+#!/bin/bash
+
+# Function to check the result of the previous command
+check_result() {
+    if [ $1 -ne 0 ]; then
+        echo "Error: $2 failed."
+        exit 1
+    fi
+}
+
+# Function to build the package index
+build_index() {
+    cd download/apt || { echo "Directory download/apt does not exist."; exit 1; }
+
+    apt-get install -y dpkg-dev
+    check_result $? "Install dpkg-dev"
+
+    dpkg-scanpackages . | gzip -9c > Packages.gz
+    check_result $? "Zip Packages"
+
+    cd - > /dev/null
+}
+
+# Main script logic
+# Assume the download_packages.sh script has been executed and packages are downloaded
+
+# Call the build_index function
+build_index
+
+echo "Package index built successfully!"
+
+
+#!/bin/bash
+
+input_file="output.txt"  # Path to the input file containing package information
+base_url="http://172.31.252.188:8081/repository/chdk-apt-hosted/pool/b"  # Base URL for package downloads
+download_dir="download/apt"  # Directory to save downloaded packages
+
+# Create the download directory if it doesn't exist
+mkdir -p "$download_dir"
+
+# Read the input file line by line
+while IFS=: read -r key version; do
+    # Strip leading/trailing whitespace
+    key=$(echo "$key" | xargs)
+    version=$(echo "$version" | xargs)
+
+    # Skip empty lines
+    if [[ -z "$key" || -z "$version" ]]; then
+        continue
+    fi
+
+    # Replace "_" with "-" in the package name
+    package_name="${key//_/}"
+    
+    # Construct the file name without "_version"
+    file_name="${package_name}_${version}_amd64.deb"
+    
+    # Construct the full URL for the download
+    url="$base_url/$package_name/$file_name"
+
+    # Download the package using wget into the specified directory
+    wget -P "$download_dir" "$url"
+
+done < "$input_file"
+
+echo "Download complete!"
+
+
+
+
+
+
+
+
+
+
+
+
+
+import os
+
+input_file = "output.txt"  # Path to the file containing package information
+base_url = "http://172.31.252.188:8081/repository/chdk-apt-hosted/pool/b"  # Base URL for package downloads
+download_dir = "download/apt"  # Directory to save downloaded packages
+
+# Create the download directory if it doesn't exist
+if not os.path.exists(download_dir):
+    os.makedirs(download_dir)
+
+with open(input_file, 'r') as infile:
+    for line in infile:
+        # Strip leading and trailing whitespace
+        line = line.strip()
+        
+        # Skip empty lines
+        if not line:
+            continue
+        
+        # Split the line based on ": " to extract key and version
+        key, version = line.split(":")
+        
+        # Strip any additional whitespace
+        key = key.strip()
+        version = version.strip()
+        
+        # Construct the package URL based on the extracted key and version
+        # The key is used as the package name, replacing "-" with "_"
+        package_name = key.replace("-", "_")
+        file_name = f"{package_name}_{version}_amd64.deb"
+        
+        # Construct the full wget command to download the package into the specified folder
+        url = f"{base_url}/{package_name}/{file_name}"
+        command = f"wget -P {download_dir} \"{url}\""
+        
+        # Print or execute the wget command
+        print(command)
+        os.system(command)  # Uncomment this line to actually run the wget command
